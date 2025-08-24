@@ -1,0 +1,29 @@
+.game-board {
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: repeat(10, 1fr);
+  border: 2px solid black;
+}
+
+.tile {
+  background-color: #f0f0f0;
+}
+
+.snake-tile {
+  background-color: greenyellow;
+}
+
+.food-tile {
+  background-color: red;
+}
+
+.gameOver {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  font-size: 2em;
+  font-weight: bold;
+  z-index: 100;
+}
