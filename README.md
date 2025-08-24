@@ -39,7 +39,7 @@ Use the **Arrow Keys** (`↑ ↓ ← →`) to move the food around the grid.
 - [x] **Full Collision Detection:** The game ends if the snake runs into the outer walls or its own ever-growing body.
 - [x] **Scoring and Infinite Growth:** Your score increases for every pellet the snake eats, and its body grows longer, shrinking the available space.
 - [ ] **Complete Game Loop:** Full state management for playing, game over, and restarting the game seamlessly.
-- [ ] **Code Comments:** Comments explaining the code, so others can learn. (jam requirement)
+- [x] **Code Comments:** Comments explaining the code, so others can learn. (jam requirement)
 
 ---
 

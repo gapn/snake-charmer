@@ -1,26 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './GameBoard.css';
 
+// ==========================================================
+// GameBoard.jsx
+// Core component for the "Snake Charmer" game.
+// Manages all game state, logic, rendering, and user input.
+// ==========================================================
+
 //game constants
 const gridSize = 10;
 const tileSize = 50; //in pixels
 
 const GameBoard = () => {
-    //state management
+    // STATE MANAGEMENT
+    // snake is array of objects with x/y coordinates, first element is the head
     const [snake, setSnake] = useState([{ x: 5, y: 5}]); //snake starts in the middle
+    // food is single object with x/y coordinates
     const [food, setFood] = useState({ x: 2, y: 2 }); //first food position
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
     
-    const foodRef = useRef(food); //create ref to hold the food position
-
+    // ref is used to hold latest food position
+    // game loop always knows where the food is without resetting the interval
+    const foodRef = useRef(food);
     useEffect(() => {
         foodRef.current = food;
     }, [food]);
 
-    //player input
+    // PLAYER INPUT
+    // setting up and cleaning up keyboard event listener
+    // depends on '[gameOver]', so that when game ends, it can re-run and use
+    // the new 'gameOver' state to disable controls
     useEffect(() => {
         const handleKeyDown = (keystroke) => {
+            //prevent player from moving food when game over
+            if (gameOver) return;
+
             switch (keystroke.key) {
                 case 'ArrowUp':
                     setFood(prevFood => ({ ...prevFood, y: Math.max(0, prevFood.y - 1) }));
@@ -43,9 +58,11 @@ const GameBoard = () => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
+    }, [gameOver]); //disable controls when game ends
 
-    //snake movement
+    // SNAKE MOVEMENT
+    // main game loop, powered by setInterval
+    // dependency array [gameOver] ensures interval is cleared when game ends
     useEffect(() => {
         if (gameOver) {
             return;
@@ -53,13 +70,17 @@ const GameBoard = () => {
 
         //snake moves based on timer interval
         const gameInterval = setInterval(() => {
+            // using functional update 'setSnake(prevSnake => ...)' to ensure always
+            // having latest snake state
             setSnake(prevSnake => {
                 const head = prevSnake[0];
                 const neck = prevSnake[1];
                 const newHead = { ...head };
                 const currentFood = foodRef.current; //read food position from ref
 
-                let currentDirection = 'up'; //default direction for the first move
+                // deriving current direction by comparing head to neck
+                // this way you dont need separate direction state variable
+                let currentDirection = 'up'; //default direction for the first move, when no neck yet
                 if (neck) {
                     if (head.y < neck.y) currentDirection = 'up';
                     else if (head.x > neck.x) currentDirection = 'right';
@@ -67,11 +88,10 @@ const GameBoard = () => {
                     else if (head.x < neck.x) currentDirection = 'left';
                 }
 
-                //simple greedy ai logic
-                //snake tries to match food x position first, then y position -> predictable 'L-shaped' movement
+                //simple greedy ai logic - snake always wants to move towards the food
+                //snake tries to match food y position first, then x position -> predictable 'L-shaped' movement
 
                 let nextMove = currentDirection; //default is moving straight
-
                 //ideal move to get to food
                 const wantsToGoUp = currentFood.y < head.y;
                 const wantsToGoRight = currentFood.x > head.x;
@@ -94,10 +114,11 @@ const GameBoard = () => {
 
                 //check for collision with walls or snake
                 if (
-                    newHead.x < 0 || newHead.x >= gridSize || newHead.y < 0 || newHead.y >= gridSize || prevSnake.some(part => part.x === newHead.x && part.y === newHead.y)
+                    newHead.x < 0 || newHead.x >= gridSize || newHead.y < 0 || newHead.y >= gridSize 
+                    || prevSnake.some(part => part.x === newHead.x && part.y === newHead.y)
                 ) {
                     setGameOver(true);
-                    return prevSnake;
+                    return prevSnake; // return original snake to stop it from moving into the wall
                 }
 
                 //update snake to move it
@@ -105,9 +126,11 @@ const GameBoard = () => {
                 
                 //check for eating food
                 if (newHead.x === currentFood.x && newHead.y === currentFood.y) {
+                    // if the head is on the food, grow snake by not removing the tail segment
                     setScore(prevScore => prevScore + 1);
                     setFood(generateFoodPosition(newSnake));
                 } else {
+                    // if not eating, normal move - remove tail segment
                     newSnake.pop();
                 }
 
@@ -118,7 +141,10 @@ const GameBoard = () => {
         return () => clearInterval(gameInterval);
     }, [gameOver]);
 
-    //rendering grid
+    // RENDERING GRID
+    // rendering gridSize x gridSize of tiles
+    // looping through each coordinate and apply CSS class of tile + 
+    // class for snake part or food part
     const renderGrid = () => {
         const grid = [];
         for (let row = 0; row < gridSize; row++) {
@@ -141,6 +167,9 @@ const GameBoard = () => {
         return grid
     };
 
+    // FOOD POSITION
+    // generating new valid position for food
+    // utilizing do...while loop for ensuring the new spot isnt on the snake body
     const generateFoodPosition = (snakeBody) => {
         let newFoodPosition;
         do {
