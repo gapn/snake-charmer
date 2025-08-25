@@ -15,7 +15,7 @@ Can you place the food in the right spot to guide the snake safely through its e
 
 ## 🚀 Live Demo
 
-A live version of this project can be viewed here: **[View Live Demo](link)**
+A live version of this project can be viewed here: **[View Live Demo](https://snake-charmer-green.vercel.app/)**
 
 ---
 
