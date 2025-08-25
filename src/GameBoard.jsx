@@ -11,6 +11,11 @@ import './GameBoard.css';
 const gridSize = 10;
 const tileSize = 50; //in pixels
 
+//difficulty settings
+const baseSpeed = 500; //starting speed in miliseconds
+const speedIncreaseFactor = 10; //how much faster per point
+const minSpeed = 200; //fastest snake can go
+
 const GameBoard = () => {
     // STATE MANAGEMENT
     // snake is array of objects with x/y coordinates, first element is the head
@@ -19,6 +24,14 @@ const GameBoard = () => {
     const [food, setFood] = useState({ x: 2, y: 2 }); //first food position
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
+    // reset to original states
+    const resetGame = () => {
+        setSnake([{ x: 5, y: 5 }]);
+        setFood(generateFoodPosition([{ x: 5, y: 5 }]));
+        setGameOver(false);
+        setScore(0);
+    };
+    const gameSpeed = Math.max(minSpeed, baseSpeed - (score * speedIncreaseFactor));
     
     // ref is used to hold latest food position
     // game loop always knows where the food is without resetting the interval
@@ -62,7 +75,7 @@ const GameBoard = () => {
 
     // SNAKE MOVEMENT
     // main game loop, powered by setInterval
-    // dependency array [gameOver] ensures interval is cleared when game ends
+    // dependency array [gameOver, score] ensures interval is cleared when game ends and reruns effect to update gameSpeed
     useEffect(() => {
         if (gameOver) {
             return;
@@ -136,10 +149,10 @@ const GameBoard = () => {
 
                 return newSnake;
             });
-        }, 500);
+        }, gameSpeed);
 
         return () => clearInterval(gameInterval);
-    }, [gameOver]);
+    }, [gameOver, score]);
 
     // RENDERING GRID
     // rendering gridSize x gridSize of tiles
@@ -149,19 +162,17 @@ const GameBoard = () => {
         const grid = [];
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
-                const isSnake = snake.some(part => 
-                    part.x === col && part.y === row
-                );
-                const isFood = food.x === col && food.y === row;
 
-                let classNameTile = 'tile';
-                if (isSnake) {
-                    classNameTile += ' snake-tile';
-                } else if (isFood) {
-                    classNameTile += ' food-tile'
-                }
+                const isFood = food.x === col && food.y === row;
+                const isHead = snake[0].x === col && snake[0].y === row;
+                const isBody = snake.slice(1).some(part => part.x === col && part.y === row);
+
+                let cellContent = '';
+                if (isFood) cellContent ='🍎';
+                else if (isHead) cellContent = '🐍';
+                else if (isBody) cellContent = '🟩'
                 
-                grid.push(<div key={`${row}-${col}`} className={classNameTile}></div>);
+                grid.push(<div key={`${row}-${col}`} className='tile'>{cellContent}</div>);
             }
         }
         return grid
@@ -194,7 +205,10 @@ const GameBoard = () => {
             >
                 {renderGrid()}
             </div>
-            {gameOver && <div className='game-over'>Game over</div>}
+            {gameOver && <div className='game-over'>
+                Game over
+                <button onClick={resetGame}>Restart</button>
+            </div>}
         </div>
     );
 };

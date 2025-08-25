@@ -35,10 +35,10 @@ Use the **Arrow Keys** (`↑ ↓ ← →`) to move the food around the grid.
 
 - [x] **Reversed Gameplay Mechanic:** A unique "Flip the Script" twist on the classic game where you control the food, not the snake (jam requirement).
 - [x] **Simple Snake AI:** The snake follows a simple, deterministic "greedy" algorithm, turning the game from a test of reflexes into a strategic puzzle.
-- [ ] **Progressive Difficulty:** The snake's movement speed increases as your score goes up, demanding faster thinking and planning.
+- [x] **Progressive Difficulty:** The snake's movement speed increases as your score goes up, demanding faster thinking and planning.
 - [x] **Full Collision Detection:** The game ends if the snake runs into the outer walls or its own ever-growing body.
 - [x] **Scoring and Infinite Growth:** Your score increases for every pellet the snake eats, and its body grows longer, shrinking the available space.
-- [ ] **Complete Game Loop:** Full state management for playing, game over, and restarting the game seamlessly.
+- [x] **Complete Game Loop:** Full state management for playing, game over, and restarting the game seamlessly.
 - [x] **Code Comments:** Comments explaining the code, so others can learn. (jam requirement)
 
 ---

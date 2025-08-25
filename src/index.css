@@ -1,68 +1,49 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+/* Import google font for retro game theme */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Orbitron:wght@400..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 body {
   margin: 0;
+  padding: 0;
+  font-family: 'Press Start 2P', cursive; /* use of imported font with fallback */
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  text-align: center;
+}
+
+/* Main application container */
+.App {
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  flex-direction: column;
+  align-items: center; /* horizontally center */
+  padding-top: 2rem; /* add space above title */
   min-height: 100vh;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  font-size: 5rem;
+  color: #61DAFB; /* A cool 'React blue' color for flair */
+  text-shadow: 2px 2px 3px #ffffffa8; /* A simple shadow to make it pop */
+  margin-bottom: 0.5rem;
+}
+
+p {
+  font-size: 2rem;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-family: 'Press Start 2P', cursive; /* Ensure the button uses the game font */
+  font-size: 2rem;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: 2px solid white;
+  border-radius: 20px;
+  background-color: grey;
+  color: white;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: background-color 0.2s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:hover {
+  border: 5px solid #61DAFB;
+  color: #61DAFB;
 }

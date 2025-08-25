@@ -7,23 +7,23 @@
 
 .tile {
   background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  line-height: 1; /* Helps with vertical alignment */
 }
 
-.snake-tile {
-  background-color: greenyellow;
-}
-
-.food-tile {
-  background-color: red;
-}
-
-.gameOver {
+.game-over {
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.189);
   color: red;
-  font-size: 2em;
+  padding: 10px 30px;
+  border-radius: 20px;
+  font-size: 5em;
   font-weight: bold;
   z-index: 100;
 }
